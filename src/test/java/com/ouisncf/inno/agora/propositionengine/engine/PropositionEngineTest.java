@@ -1,6 +1,6 @@
 package com.ouisncf.inno.agora.propositionengine.engine;
 
-import static com.ouisncf.inno.agora.propositionengine.engine.PropositionEngine.PATTERN_DATE;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollProperties.getPatternDateFriday;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import java.time.DayOfWeek;
@@ -66,7 +66,7 @@ public class PropositionEngineTest {
       case NEXT_AFTER_FRIDAY: friday = friday.plusDays(14);
     }
 
-    return friday.format(DateTimeFormatter.ofPattern(PATTERN_DATE));
+    return friday.format(DateTimeFormatter.ofPattern(getPatternDateFriday()));
   }
 
 

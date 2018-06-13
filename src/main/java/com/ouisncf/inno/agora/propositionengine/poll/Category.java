@@ -1,4 +1,4 @@
-package com.ouisncf.inno.agora.propositionengine.category;
+package com.ouisncf.inno.agora.propositionengine.poll;
 
 import java.util.List;
 

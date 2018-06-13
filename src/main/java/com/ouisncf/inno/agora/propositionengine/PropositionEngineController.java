@@ -1,8 +1,13 @@
 package com.ouisncf.inno.agora.propositionengine;
 
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DEPARTURE;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DESTINATION;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICE;
+
 import com.ouisncf.inno.agora.propositionengine.engine.Proposition;
 import com.ouisncf.inno.agora.propositionengine.engine.PropositionEngine;
 import com.ouisncf.inno.agora.propositionengine.engine.TravelerChoice;
+import com.ouisncf.inno.agora.propositionengine.poll.PollCategories;
 import java.util.Collection;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +26,7 @@ public class PropositionEngineController {
    */
   @GetMapping("/destinations")
   public Collection<String> getDestinations() {
-    return PropositionEngine.DESTINATIONS;
+    return PollCategories.get(DESTINATION);
   }
 
   /**
@@ -29,7 +34,7 @@ public class PropositionEngineController {
    * @return departure
    */
   @GetMapping("/departures")
-  public Collection<String> getDepartureDates() { return PropositionEngine.DEPARTURE_DATES; }
+  public Collection<String> getDepartureDates() { return PollCategories.get(DEPARTURE);}
 
   /**
    * Permet de renvoyer les propositions de prix
@@ -37,7 +42,7 @@ public class PropositionEngineController {
    */
   @GetMapping("/prices")
   public Collection<String> getPrices() {
-    return PropositionEngine.PRICES;
+    return PollCategories.get(PRICE);
   }
 
   /**

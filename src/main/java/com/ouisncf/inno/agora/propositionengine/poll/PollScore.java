@@ -1,4 +1,4 @@
-package com.ouisncf.inno.agora.propositionengine.engine;
+package com.ouisncf.inno.agora.propositionengine.poll;
 
 public class PollScore {
 

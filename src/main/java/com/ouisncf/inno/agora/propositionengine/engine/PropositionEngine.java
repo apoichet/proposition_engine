@@ -1,41 +1,34 @@
 package com.ouisncf.inno.agora.propositionengine.engine;
 
-import com.ouisncf.inno.agora.propositionengine.category.Categories;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DEPARTURE;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DEPARTURE_DATES;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DESTINATION;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DESTINATIONS;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICE;
+import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICES;
+
+import com.ouisncf.inno.agora.propositionengine.poll.PollCategories;
+import com.ouisncf.inno.agora.propositionengine.poll.PollScore;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PropositionEngine {
-
-  public final static List<String> DESTINATIONS = Arrays.asList("Lyon","Marseille","Bordeaux");
-  public final static List<String> DEPARTURE_DATES = getDepartureDates();
-  public final static List<String> PRICES = Arrays.asList("Moins de 50€", "Moins de 80€", "Plus de 80€");
-
-  private static final String DESTINATION = "destination";
-  private static final String DEPARTURE = "departure";
-  private static final String PRICE = "price";
-  public static final String PATTERN_DATE = "d/M";
-
+  
   public List<Proposition> build(Collection<TravelerChoice> travelerChoices){
 
-    //Build poll categories
-    Map<String, Map<String, PollScore>> pollCategorie = buildEmptyPoll();
+    //New poll categories
+    PollCategories pollCategories = new PollCategories();
 
     //Update poll with travel choices
-    updatePoll(travelerChoices, pollCategorie);
+    updatePoll(travelerChoices, pollCategories);
 
     //Build propositions
-    final List<Proposition> propositions = buildPropositions(pollCategorie);
+    final List<Proposition> propositions = buildPropositions(pollCategories);
 
     //Limite propositions
     int nbrPropositionMax = calculNbrPropositions(travelerChoices);
@@ -93,32 +86,5 @@ public class PropositionEngine {
         .ifPresent(pollScore -> pollScore.score++);
 
     });
-  }
-
-  private Map<String, Map<String, PollScore>> buildEmptyPoll() {
-    Map<String, Map<String, PollScore>> pollCategorie = new HashMap<>();
-    buildCategories().forEach(category -> {
-      Map<String, PollScore> pollElement = new HashMap<>();
-      category.getElements().forEach(element -> pollElement.put(element, new PollScore(category.getWeight())));
-      pollCategorie.put(category.getName(), pollElement);
-    });
-    return pollCategorie;
-  }
-
-
-  private Categories buildCategories() {
-    return Categories.builder()
-      .withCategory(DESTINATION, DESTINATIONS)
-      .withCategory(DEPARTURE, DEPARTURE_DATES)
-      .withCategory(PRICE, PRICES)
-      .buildWithEqualWeight();
-  }
-
-  private static List<String> getDepartureDates(){
-    LocalDate friday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-    LocalDate nextFriday = friday.plusDays(7);
-    LocalDate afterNextFriday = nextFriday.plusDays(7);
-    final DateTimeFormatter pattern = DateTimeFormatter.ofPattern(PATTERN_DATE);
-    return Arrays.asList(friday.format(pattern), nextFriday.format(pattern), afterNextFriday.format(pattern));
   }
 }
