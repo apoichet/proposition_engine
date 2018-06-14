@@ -19,17 +19,18 @@ public class PropositionEngineTest {
   private static final String NEXT_AFTER_FRIDAY = "next after friday";
 
   private PropositionEngine propositionEngine;
+  private List<TravelerChoice> travelerChoices;
 
   @Before
   public void setUp(){
     propositionEngine = new PropositionEngine();
+    travelerChoices = new ArrayList<>();
   }
   
 
   @Test
   public void should_give_best_three_propositions(){
     //Given
-    List<TravelerChoice> travelerChoices = new ArrayList<>();
     travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "Moins de 50€"));
     travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(FRIDAY), "Moins de 50€"));
     travelerChoices.add(new TravelerChoice("Marseille", give_date_departure(NEXT_AFTER_FRIDAY), "Moins de 80€"));
@@ -59,7 +60,28 @@ public class PropositionEngineTest {
     assertThat(p3.getPrice()).isEqualTo("Moins de 50€");
   }
 
-  private String give_date_departure(String whatFriday){
+  @Test
+  public void should_detect_equalities_score_proposition(){
+    //Given
+    travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "Moins de 50€"));
+    travelerChoices.add(new TravelerChoice("Marseille", give_date_departure(FRIDAY), "Moins de 80€"));
+    travelerChoices.add(new TravelerChoice("Bordeaux", give_date_departure(NEXT_AFTER_FRIDAY), "Plus de 50€"));
+
+    //When
+    List<Proposition> propositions = propositionEngine.build(travelerChoices);
+
+    //Then
+    assertThat(propositions).isNotEmpty();
+    assertThat(propositions).hasSize(2);
+
+    Proposition p1 = propositions.get(0);
+    Proposition p2 = propositions.get(1);
+
+    assertThat(p1.getScore()).isEqualTo(p2.getScore());
+
+  }
+
+  public static String give_date_departure(String whatFriday){
     LocalDate friday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
     switch (whatFriday){
       case NEXT_FRIDAY: friday = friday.plusDays(7);break;
