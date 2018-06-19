@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class PollCategories extends HashMap<String, Map<String, PollScore>> {
 
   public final static List<String> DESTINATIONS = getDestinations();
-  public final static List<String> DEPARTURE_DATES = getNextFridays(getNbrFridays(), getPatternDateFriday());
+  public final static List<String> DEPARTURE_DATES = getNextFridays(getNbrFridays());
   public final static List<String> PRICES = getPrices();
 
   public static final String DESTINATION = "destination";

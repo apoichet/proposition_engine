@@ -9,19 +9,32 @@ import java.util.List;
 
 public class FridayFactory {
 
-  public static List<String> getNextFridays(int nbr, String patternDate){
+  public static List<String> getNextFridays(int nbr){
     if (nbr==0){
-       return new ArrayList<>();
+      return new ArrayList<>();
     }
 
     List<String> fridays = new ArrayList<>();
     LocalDate friday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-    fridays.add(friday.format(DateTimeFormatter.ofPattern(patternDate)));
+    fridays.add(getFridayStr(friday));
 
     for (int i = 1; i < nbr; i++) {
-        fridays.add(friday.plusDays(7*i).format(DateTimeFormatter.ofPattern(patternDate)));
+      final LocalDate plusDays = friday.plusDays(7 * i);
+
+      fridays.add(getFridayStr(plusDays));
     }
 
     return fridays;
+  }
+
+  public static String getFridayStr(LocalDate friday){
+    
+    String day = String.valueOf(friday.getDayOfMonth());
+    day = day.length() == 1 ? "0".concat(day) : day;
+
+    String month = String.valueOf(friday.getMonthValue());
+    month = month.length() == 1 ? "0".concat(month) : month;
+
+    return month.concat("/").concat(day);
   }
 }
