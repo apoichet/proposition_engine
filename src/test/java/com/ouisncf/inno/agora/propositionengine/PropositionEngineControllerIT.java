@@ -13,7 +13,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class PropositionEngineControllerIT {
     //Given
     this.base = new URI("http://localhost:" + port + "/agora/proposition/build");
     List<TravelerChoice> travelerChoices = new ArrayList<>();
-    travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "Moins de 50€"));
+    travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "< 50€"));
     //When
     ResponseEntity<Proposition[]> response = template.postForEntity(this.base, travelerChoices, Proposition[].class);
     //Then
@@ -85,7 +84,7 @@ public class PropositionEngineControllerIT {
     assertThat(response.getBody()).hasSize(1);
     assertThat(Arrays.asList(response.getBody()).get(0).getDestination()).isEqualTo("Lyon");
     assertThat(Arrays.asList(response.getBody()).get(0).getDepartureDate()).isEqualTo(give_date_departure(NEXT_FRIDAY));
-    assertThat(Arrays.asList(response.getBody()).get(0).getPrice()).isEqualTo("Moins de 50€");
+    assertThat(Arrays.asList(response.getBody()).get(0).getPrice()).isEqualTo("< 50€");
   }
 
 

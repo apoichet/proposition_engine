@@ -2,7 +2,6 @@ package com.ouisncf.inno.agora.propositionengine.poll;
 
 import static com.ouisncf.inno.agora.propositionengine.poll.PollProperties.getDestinations;
 import static com.ouisncf.inno.agora.propositionengine.poll.PollProperties.getNbrFridays;
-import static com.ouisncf.inno.agora.propositionengine.poll.PollProperties.getPatternDateFriday;
 import static com.ouisncf.inno.agora.propositionengine.poll.PollProperties.getPrices;
 import static com.ouisncf.inno.agora.propositionengine.utils.FridayFactory.getNextFridays;
 

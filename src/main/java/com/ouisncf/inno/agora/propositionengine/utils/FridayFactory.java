@@ -35,6 +35,6 @@ public class FridayFactory {
     String month = String.valueOf(friday.getMonthValue());
     month = month.length() == 1 ? "0".concat(month) : month;
 
-    return month.concat("/").concat(day);
+    return day.concat("/").concat(month);
   }
 }
