@@ -7,9 +7,18 @@ public class Proposition implements Serializable {
   private String destination;
   private String price;
   private String departureDate;
+  private int nbrPassenger;
   private float score;
 
   public Proposition() {
+  }
+
+  public Proposition(String destination, String departureDate, String price, int nbrPassenger, float score) {
+    this.destination = destination;
+    this.price = price;
+    this.departureDate = departureDate;
+    this.nbrPassenger = nbrPassenger;
+    this.score = score;
   }
 
   public Proposition(String destination, String departureDate, String price, float score) {
@@ -23,6 +32,14 @@ public class Proposition implements Serializable {
     this.destination = destination;
     this.price = price;
     this.departureDate = departureDate;
+  }
+
+  public int getNbrPassenger() {
+    return nbrPassenger;
+  }
+
+  public void setNbrPassenger(int nbrPassenger) {
+    this.nbrPassenger = nbrPassenger;
   }
 
   public float getScore() {

@@ -30,7 +30,7 @@ public class PropositionEngine {
     updatePoll(travelerChoices, pollCategories);
 
     //Build propositions
-    final List<Proposition> propositions = buildPropositions(pollCategories);
+    final List<Proposition> propositions = buildPropositions(pollCategories, travelerChoices.size());
 
     //Limite propositions
     int nbrPropositionMax = calculNbrPropositions(travelerChoices);
@@ -63,7 +63,7 @@ public class PropositionEngine {
     return nbrProposition;
   }
 
-  private List<Proposition> buildPropositions(Map<String, Map<String, PollScore>> pollCategorie) {
+  private List<Proposition> buildPropositions(Map<String, Map<String, PollScore>> pollCategorie, int nbrPassenger) {
     String[][][] matrixProposition = new String[DESTINATIONS.size()][DEPARTURE_DATES.size()][PRICES.size()];
     List<Proposition> propositions = new ArrayList<>();
     for (int i = 0; i < matrixProposition.length; i++) {
@@ -72,7 +72,8 @@ public class PropositionEngine {
           float scoreDesti = pollCategorie.get(DESTINATION).get(DESTINATIONS.get(i)).calculScore();
           float scoreDate = pollCategorie.get(DEPARTURE).get(DEPARTURE_DATES.get(j)).calculScore();
           float scorePrice = pollCategorie.get(PRICE).get(PRICES.get(k)).calculScore();
-          propositions.add(new Proposition(DESTINATIONS.get(i), DEPARTURE_DATES.get(j), PRICES.get(k), scoreDesti+scoreDate+scorePrice));
+          propositions.add(new Proposition(DESTINATIONS.get(i),
+            DEPARTURE_DATES.get(j), PRICES.get(k), nbrPassenger, scoreDesti+scoreDate+scorePrice));
         }
       }
     }

@@ -11,7 +11,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -90,8 +93,7 @@ public class QuoteBuilder {
 
     final String[] split = StringUtils.split(proposition.getDepartureDate(), "/");
     String year = String.valueOf(LocalDate.now().getYear());
-
-    return new StringBuilder()
+    final StringBuilder request = new StringBuilder()
       .append("http://nucleus.eu-west-1.elasticbeanstalk.com/proposals/v1/")
       .append("FRPAR").append("/")
       .append(getCityCode(proposition.getDestination()))
@@ -99,9 +101,17 @@ public class QuoteBuilder {
       .append(year.concat(split[1]).concat(split[0]))
       .append("/")
       .append("2")
-      .append("/")
-      .append("26-NO_CARD")
-      .toString();
+      .append("/");
+
+    List<String> passengers = new ArrayList<>();
+
+    for (int i = 0; i < proposition.getNbrPassenger(); i++) {
+      passengers.add("26-NO_CARD");
+    }
+
+    request.append(passengers.stream().collect(Collectors.joining(",")));
+
+    return request.toString();
   }
 
 
