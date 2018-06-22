@@ -7,6 +7,8 @@ import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DESTI
 import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICE;
 import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICES;
 
+import com.ouisncf.inno.agora.propositionengine.exception.AgoraBackException;
+import com.ouisncf.inno.agora.propositionengine.exception.PollEqualityException;
 import com.ouisncf.inno.agora.propositionengine.poll.PollCategories;
 import com.ouisncf.inno.agora.propositionengine.poll.PollScore;
 import java.util.ArrayList;
@@ -18,8 +20,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PropositionEngine {
-  
-  public List<Proposition> build(Collection<TravelerChoice> travelerChoices){
+
+  public List<Proposition> build(Collection<TravelerChoice> travelerChoices) throws AgoraBackException{
 
     //New poll categories
     PollCategories pollCategories = new PollCategories();
@@ -32,11 +34,18 @@ public class PropositionEngine {
 
     //Limite propositions
     int nbrPropositionMax = calculNbrPropositions(travelerChoices);
-
-    return propositions.stream()
+    final List<Proposition> finalProposals = propositions.stream()
       .sorted(Comparator.comparing(Proposition::getScore).reversed())
       .limit(nbrPropositionMax)
       .collect(Collectors.toList());
+
+    if (finalProposals.size() > 1){
+      if (finalProposals.get(0).getScore() == finalProposals.get(1).getScore()){
+        throw  new PollEqualityException("Des propositions ont le même score !", 409);
+      }
+    }
+
+    return finalProposals;
 
   }
 
