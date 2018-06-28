@@ -82,11 +82,6 @@ public class AgoraBackController {
   public Collection<Quote> buildQuotations(@RequestBody Collection<Proposition> propositions) {
     return new QuoteBuilder(propositions).getQuotes();
   }
-
-  @PostMapping(path = "test")
-  public ResponseEntity<?> test(){
-    Collection<Quote> tests = Arrays.asList(new Quote(), new Quote());
-    return new ResponseEntity<>(tests, HttpStatus.CONFLICT);
-  }
+  
 
 }

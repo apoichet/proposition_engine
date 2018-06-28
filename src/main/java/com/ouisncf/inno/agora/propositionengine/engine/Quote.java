@@ -5,14 +5,37 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Quote implements Serializable {
 
+  private Integer id;
   private String outwardOrigin;
   private String outwardDestination;
   private float price;
   private String departureDate;
   private String arrivalDate;
   private String urlImage;
+  private String fareCondition;
+  private int nbrPassenger;
 
   public Quote() {
+  }
+
+  public Quote(Integer id) {
+    this.id = id;
+  }
+
+  public String getFareCondition() {
+    return fareCondition;
+  }
+
+  public void setFareCondition(String fareCondition) {
+    this.fareCondition = fareCondition;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public String getUrlImage() {
@@ -61,6 +84,14 @@ public class Quote implements Serializable {
 
   public void setArrivalDate(String arrivalDate) {
     this.arrivalDate = arrivalDate;
+  }
+
+  public int getNbrPassenger() {
+    return nbrPassenger;
+  }
+
+  public void setNbrPassenger(int nbrPassenger) {
+    this.nbrPassenger = nbrPassenger;
   }
 
   public static String getCityCode(String city){

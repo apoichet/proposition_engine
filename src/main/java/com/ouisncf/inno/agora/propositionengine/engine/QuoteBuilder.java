@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +48,7 @@ public class QuoteBuilder {
         Object obj = parser.parse(response.toString());
         JSONArray array = (JSONArray) obj;
 
+        int countQuote = 0;
         for (int i = 0; i < array.size(); i++) {
           JSONObject jsonQuote = (JSONObject) array.get(i);
           Integer totalPrice = Integer.parseInt(jsonQuote.get("totalPrice").toString())/100;
@@ -61,10 +61,11 @@ public class QuoteBuilder {
           JSONArray segments = (JSONArray) jsonQuote.get("segments");
 
           if(isHourOk && segments.size() == 1 && (isFirstPrice || isSecondPrice || isThirdPrice)){
-
-            Quote quote = new Quote();
+            countQuote++;
+            Quote quote = new Quote(countQuote);
             quote.setDepartureDate(departureDate.format(DateTimeFormatter.ofPattern("dd/MM HH:mm")));
             quote.setArrivalDate(LocalDateTime.parse(jsonQuote.get("arrivalDate").toString(), DateTimeFormatter.ISO_DATE_TIME).format(DateTimeFormatter.ofPattern("dd/MM HH:mm")));
+            quote.setNbrPassenger(proposition.getNbrPassenger());
 
             JSONObject segment = (JSONObject) segments.get(0);
             JSONObject origin = (JSONObject) segment.get("origin");
@@ -73,6 +74,16 @@ public class QuoteBuilder {
             quote.setOutwardDestination(destination.get("cityLabel").toString());
             quote.setPrice(totalPrice);
             quote.setUrlImage(Quote.getUrlCity(proposition.getDestination()));
+            JSONObject quotations = (JSONObject) segment.get("quotations");
+            JSONObject typoPax = (JSONObject) quotations.get("26-NO_CARD");
+            JSONObject fareCondition = (JSONObject) typoPax.get("fareCondition");
+            JSONArray conditions = (JSONArray) fareCondition.get("conditions");
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < conditions.size(); j++) {
+                sb.append((String) conditions.get(j));
+                sb.append("\n");
+            }
+            quote.setFareCondition(StringUtils.replace((String) conditions.get(0), "&euro", "€"));
             quotes.add(quote);
             if (quotes.size() > 2){
               return quotes;
