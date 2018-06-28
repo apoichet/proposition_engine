@@ -7,7 +7,7 @@ import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.DESTI
 import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICE;
 import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICES;
 
-import com.ouisncf.inno.agora.propositionengine.exception.AgoraBackException;
+import com.ouisncf.inno.agora.propositionengine.exception.PropositionEngineException;
 import com.ouisncf.inno.agora.propositionengine.exception.PollEqualityException;
 import com.ouisncf.inno.agora.propositionengine.poll.PollCategories;
 import com.ouisncf.inno.agora.propositionengine.poll.PollScore;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class PropositionEngine {
 
-  public List<Proposition> build(Collection<TravelerChoice> travelerChoices) throws AgoraBackException{
+  public List<Proposition> build(Collection<TravelerChoice> travelerChoices) throws PropositionEngineException {
 
     //New poll categories
     PollCategories pollCategories = new PollCategories();

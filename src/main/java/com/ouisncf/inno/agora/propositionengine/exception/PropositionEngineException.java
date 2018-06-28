@@ -1,6 +1,6 @@
 package com.ouisncf.inno.agora.propositionengine.exception;
 
-public class AgoraBackException extends RuntimeException{
+public class PropositionEngineException extends RuntimeException{
 
   private int codeException;
 
@@ -12,7 +12,7 @@ public class AgoraBackException extends RuntimeException{
     this.codeException = codeException;
   }
 
-  public AgoraBackException(String message, int codeException) {
+  public PropositionEngineException(String message, int codeException) {
     super(message);
     this.codeException = codeException;
   }

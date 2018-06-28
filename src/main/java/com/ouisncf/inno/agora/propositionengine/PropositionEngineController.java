@@ -6,30 +6,22 @@ import static com.ouisncf.inno.agora.propositionengine.poll.PollCategories.PRICE
 
 import com.ouisncf.inno.agora.propositionengine.engine.Proposition;
 import com.ouisncf.inno.agora.propositionengine.engine.PropositionEngine;
-import com.ouisncf.inno.agora.propositionengine.engine.Quote;
-import com.ouisncf.inno.agora.propositionengine.engine.QuoteBuilder;
 import com.ouisncf.inno.agora.propositionengine.engine.TravelerChoice;
-import com.ouisncf.inno.agora.propositionengine.exception.AgoraBackException;
+import com.ouisncf.inno.agora.propositionengine.exception.PropositionEngineException;
 import com.ouisncf.inno.agora.propositionengine.exception.PollEqualityException;
 import com.ouisncf.inno.agora.propositionengine.poll.PollCategories;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/agoraback")
-public class AgoraBackController {
+public class PropositionEngineController {
 
   /**
    * Permet de renvoyer les propositions de destinations
@@ -66,21 +58,12 @@ public class AgoraBackController {
       final Collection<Proposition> proposals = new PropositionEngine().build(travelerChoices);
       return new ResponseEntity<>(proposals, HttpStatus.OK);
     }
-    catch (AgoraBackException exception){
+    catch (PropositionEngineException exception){
       if (exception instanceof PollEqualityException) {
         return new ResponseEntity<>(HttpStatus.valueOf(exception.getCodeException()));
       }
     }
     return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-  }
-
-  /**
-   * Permet de renvoyer les quotations
-   * @return quotations
-   */
-  @PostMapping(path = "quotation/build")
-  public Collection<Quote> buildQuotations(@RequestBody Collection<Proposition> propositions) {
-    return new QuoteBuilder(propositions).getQuotes();
   }
   
 
