@@ -40,7 +40,7 @@ public class PropositionEngineControllerIT {
   @Test
   public void getDestinationsTest() throws Exception {
     //Given
-    this.base = new URI("http://localhost:" + port + "/agora/proposition/destinations");
+    this.base = new URI("http://localhost:" + port + "/agoraback/proposition/destinations");
     //When
     ResponseEntity<String[]> response = template.getForEntity(this.base, String[].class);
     //Then
@@ -51,7 +51,7 @@ public class PropositionEngineControllerIT {
   @Test
   public void getDateDeparturesTest() throws Exception {
     //Given
-    this.base = new URI("http://localhost:" + port + "/agora/proposition/departures");
+    this.base = new URI("http://localhost:" + port + "/agoraback/proposition/departures");
     //When
     ResponseEntity<String[]> response = template.getForEntity(this.base, String[].class);
     //Then
@@ -62,7 +62,7 @@ public class PropositionEngineControllerIT {
   @Test
   public void getPricesTest() throws Exception {
     //Given
-    this.base = new URI("http://localhost:" + port + "/agora/proposition/prices");
+    this.base = new URI("http://localhost:" + port + "/agoraback/proposition/prices");
     //When
     ResponseEntity<String[]> response = template.getForEntity(this.base, String[].class);
     //Then
@@ -73,9 +73,9 @@ public class PropositionEngineControllerIT {
   @Test
   public void buildPropositionsTest() throws Exception {
     //Given
-    this.base = new URI("http://localhost:" + port + "/agora/proposition/build");
+    this.base = new URI("http://localhost:" + port + "/agoraback/proposition/build");
     List<TravelerChoice> travelerChoices = new ArrayList<>();
-    travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "< 50€"));
+    travelerChoices.add(new TravelerChoice("Lyon", give_date_departure(NEXT_FRIDAY), "< 50 €"));
     //When
     ResponseEntity<Proposition[]> response = template.postForEntity(this.base, travelerChoices, Proposition[].class);
     //Then
@@ -84,7 +84,7 @@ public class PropositionEngineControllerIT {
     assertThat(response.getBody()).hasSize(1);
     assertThat(Arrays.asList(response.getBody()).get(0).getDestination()).isEqualTo("Lyon");
     assertThat(Arrays.asList(response.getBody()).get(0).getDepartureDate()).isEqualTo(give_date_departure(NEXT_FRIDAY));
-    assertThat(Arrays.asList(response.getBody()).get(0).getPrice()).isEqualTo("< 50€");
+    assertThat(Arrays.asList(response.getBody()).get(0).getPrice()).isEqualTo("< 50 €");
   }
 
 
